@@ -11,6 +11,7 @@ import java.io.IOException;
 public class ErrorServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setStatus(404);
         ServletOutputStream out = resp.getOutputStream();
         out.println("Page not found!!!");
         out.close();
