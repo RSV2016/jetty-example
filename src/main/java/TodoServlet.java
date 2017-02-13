@@ -13,13 +13,7 @@ import java.util.List;
  * Created by FreeFly on 06.02.2017.
  */
 public class TodoServlet extends HttpServlet {
-    private List<String> todos = new LinkedList<String>();
-
-    public TodoServlet() {
-        todos.add("Go home");
-        todos.add("Check email");
-        todos.add("Drink Non-Stop");
-    }
+    private TodoDao todoDao = new TodoDao();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -27,8 +21,11 @@ public class TodoServlet extends HttpServlet {
 
         ServletOutputStream out = resp.getOutputStream();
 
-        for (String todo : todos) {
-            out.println(todo + "<br>");
+        List<String> allTodos = todoDao.getAll();
+
+        for (int i = 0; i < allTodos.size(); i++) {
+            out.println(allTodos.get(i) + "<a href=\"/delete?lineNumber=" +
+                    i + "\">[X]</a><br>");
         }
 
         out.println("<form method=\"post\">");
@@ -44,8 +41,8 @@ public class TodoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String newTodo = req.getParameter("todo");
-        if(StringUtil.isNotBlank(newTodo)) {
-            todos.add(newTodo);
+        if (StringUtil.isNotBlank(newTodo)) {
+            todoDao.addNew(newTodo);
         }
 
         resp.sendRedirect("/todos");

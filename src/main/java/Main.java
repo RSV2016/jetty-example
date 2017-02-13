@@ -13,9 +13,22 @@ public class Main {
         context.setContextPath("/");
         server.setHandler(context);
 
+        // Any url wihout mapping
         context.addServlet(new ServletHolder(new ErrorServlet()),"/");
+
+        // Home page(Main page)
+        // URL: http://localhost
         context.addServlet(new ServletHolder(new HomeServlet()),"");
+
+        // Todos
+        // URL: http://localhost/todos
         context.addServlet(new ServletHolder(new TodoServlet()),"/todos");
+
+        // Delete to-do
+        // URL: http://localhost/delete?lineNumber=[int]
+        context.addServlet(new ServletHolder(new DeleteTodoServlet()),"/delete");
+
+
 
         server.start();
         server.join();
